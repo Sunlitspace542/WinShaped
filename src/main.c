@@ -5895,9 +5895,23 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE prev, PWSTR cmd, int show) {
         return ok ? 0 : 1;
     }
     if (argc == 2 && (!_wcsicmp(argv[1], L"--help") || !wcscmp(argv[1], L"-?"))) {
+        /*
         MessageBoxW(g_hwnd, L"Shaped.exe --bsp [input [output]]\nShaped.exe --export-bsp input [output]\nShaped.exe -b input [output]\n\nWhen output is omitted, input.ext becomes input.asm.", L"SHAPED command line", MB_OK | MB_ICONINFORMATION);
         LocalFree(argv);
         DestroyWindow(g_hwnd);
+        */
+        printf(
+			"Shaped -Shape Editor- Carl N Graham -Argonaut Software- 1991-1992\n"
+			"\n"
+			"Shaped.exe --bsp [input [output]]\n"
+			"Shaped.exe -b input [output]\n"
+			"Shaped.exe --export-[format] input [output]\n"
+			"\n"
+			"[format] can be:\n"
+			"gzs\npc\ninternal\n3dg1"
+			"\n\n"
+			"When output is omitted, input.ext becomes input.asm."
+		);
         return 0;
     }
     if (argc == 2 && !_wcsicmp(argv[1], L"--bsp")) {
