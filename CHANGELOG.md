@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Added a complete illustrated user guide with 59 native-build screenshots,
+  covering every editor menu, modeling workflow, transform, animation feature,
+  Preview control, format, exporter, SNES data path, keyboard shortcut, CLI
+  option, limit, and troubleshooting case.
+
 ## 1.0.0 - 2026-08-22
 
 - First complete native 64-bit Windows release.

@@ -2,6 +2,9 @@
 
 Version 1.0.0
 
+For complete illustrated operating instructions, see the
+**[SHAPED Native 1.0 User Guide](docs/USER_GUIDE.md)**.
+
 This workspace contains a clean native Win32 reconstruction of Argonaut's DOS
 `SHAPED.EXE` (1991–1992), based on the user-supplied executable, debugger symbol
 table, debugger assembly listing, extracted strings, and behavioral observation.
