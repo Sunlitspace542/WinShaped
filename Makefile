@@ -4,7 +4,7 @@ WINDRES := windres
 CFLAGS  := -std=c11 -Wall -Wextra -Wpedantic \
            -DUNICODE -D_UNICODE -DWIN32_LEAN_AND_MEAN
 
-LDFLAGS := -static -static-libgcc -municode
+LDFLAGS := -static -static-libgcc -municode -mwindows
 LDLIBS  := -lgdi32 -luser32
 
 TARGET  := dist/Shaped.exe
