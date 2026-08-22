@@ -1826,7 +1826,12 @@ static void write_asm_vizis(FILE *f) {
     for (size_t i = 0; i < g_shape.poly_count; i++)
         if (g_shape.polys[i].flags && g_shape.polys[i].count > 2)
             count++;
-    fprintf(f, "\tVizis\t%llu\n", (unsigned long long)count);
+    if (count != 0) {
+        fprintf(f, "\tVizis\t%llu\n", (unsigned long long)count);
+    } else {
+        // Create dummy vizi if there are none (fixes crash for models composed of all lines)
+        fprintf(f, "\tVizis\t1\n");
+    }
     for (size_t i = 0; i < g_shape.poly_count; i++) {
         Poly *p = &g_shape.polys[i];
         if (!p->flags || p->count <= 2)
