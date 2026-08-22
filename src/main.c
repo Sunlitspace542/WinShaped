@@ -1829,7 +1829,7 @@ static void write_asm_vizis(FILE *f) {
     if (count != 0) {
         fprintf(f, "\tVizis\t%llu\n", (unsigned long long)count);
     } else {
-        // Create dummy vizi if there are none (fixes crash for models composed of all lines)
+    // Create dummy vizi if there are none (fixes crash for models composed of all lines)
         fprintf(f, "\tVizis\t1\n");
     }
     for (size_t i = 0; i < g_shape.poly_count; i++) {
