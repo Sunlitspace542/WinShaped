@@ -1712,7 +1712,7 @@ static void write_asm_header(FILE *f, const char *name, const Dot *extra, size_t
     AsmBounds b = asm_bounds(extra, extra_count);
     char source[MAX_PATH];
     source_name(source);
-    const char *coltab = g_coltab_count && g_coltab_index >= 0 && g_coltab_index < g_coltab_count ? g_coltab_entries[g_coltab_index].name : "id_0_c"; //default to id_0_c if no coltab specified
+    const char *coltab = g_coltab_count && g_coltab_index >= 0 && g_coltab_index < g_coltab_count ? g_coltab_entries[g_coltab_index].name : "id_0_c"; // default to id_0_c if no coltab specified
     fprintf(f, ";--Shape file ----- %s ----\n\tifne\tDO_HDR\n\n%s\n", source, name);
     fprintf(f, "\tShapeHdr\t%s_P,0,%s_F,0,0,0,0,0,0,%.0f,%.0f,%.0f,%.0f,%s,0,0,0,0,<%s>\n\telseif\n", name, name, b.x, b.y, b.z, b.radius, coltab, name);
 }
@@ -5881,7 +5881,7 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE prev, PWSTR cmd, int show) {
     wc.lpszClassName = L"ShapedNative";
     wc.hCursor = LoadCursorW(NULL, IDC_CROSS);
     wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.hIcon = LoadIcon(hi, MAKEINTRESOURCE(2));
+    wc.hIcon = LoadIcon(hi, MAKEINTRESOURCE(2));
     RegisterClassW(&wc);
     RECT wr = {0, 0, 640, 480};
     AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
@@ -5905,17 +5905,16 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE prev, PWSTR cmd, int show) {
         DestroyWindow(g_hwnd);
         */
         printf(
-			"Shaped -Shape Editor- Carl N Graham -Argonaut Software- 1991-1992\n"
-			"\n"
-			"Shaped.exe --bsp [input [output]]\n"
-			"Shaped.exe -b input [output]\n"
-			"Shaped.exe --export-[format] input [output]\n"
-			"\n"
-			"[format] can be:\n"
-			"gzs\npc\ninternal\n3dg1"
-			"\n\n"
-			"When output is omitted, input.ext becomes input.asm."
-		);
+            "Shaped -Shape Editor- Carl N Graham -Argonaut Software- 1991-1992\n"
+            "\n"
+            "Shaped.exe --bsp [input [output]]\n"
+            "Shaped.exe -b input [output]\n"
+            "Shaped.exe --export-[format] input [output]\n"
+            "\n"
+            "[format] can be:\n"
+            "gzs\npc\ninternal\n3dg1"
+            "\n\n"
+            "When output is omitted, input.ext becomes input.asm.");
         return 0;
     }
     if (argc == 2 && !_wcsicmp(argv[1], L"--bsp")) {
