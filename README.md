@@ -1,6 +1,6 @@
 # Shaped native Windows reconstruction
 
-Version 1.0.0
+Version 1.0.1
 
 For complete illustrated operating instructions, see the
 **[SHAPED Native 1.0 User Guide](docs/USER_GUIDE.md)**.
@@ -52,8 +52,8 @@ system components (GDI, User, Shell, Kernel, and the OS Universal CRT API sets).
   inactive-slot deletion followed by explicit `Compact`, and single-level swap
   undo with selection-order restoration
 - Polygon type editing reproduces the inert base `Poly` row, derives menu state
-  from the first selected three-or-more-vertex polygon in fixed-slot order, and
-  toggles only the five original attribute bits on eligible selected polygons
+  from the first selected line-or-polygon face in fixed-slot order, and toggles
+  only the five original attribute bits on eligible selected faces
 - Recovered transform interaction: pixel-accurate projected Move, all-frame Copy,
   and Rotate's centre-click/angle-drag/`Add image` workflow; Move/Copy use the
   original snapped-current-minus-snapped-start displacement and Rotate/Size use
@@ -99,14 +99,16 @@ system components (GDI, User, Shell, Kernel, and the OS Universal CRT API sets).
   allocation, current-group activation, SAMS winding reversal, and Y negation
 - Recovered load/save error contract, including retained input paths, the
   `Alien file format` message, and `File <...>?` reporting
-- Multi-frame animation editing, insertion/deletion/copying, key loading, the
+- Multi-frame animation editing up to 128 frames, insertion/deletion/copying,
+  key loading, the
   original inline-value Frames workflow, and one-pass Show-all dot overlay in
   cyclic next-frame order with the current frame drawn last; the
   recovered `Shift An` command rotates selected-dot and selected-polygon-vertex
   records forward by one frame, including the original temporary `0x0200` flags,
   while Key Frame performs the DOS inverse-square weighted deformation from up
   to 16 animated control points rather than replacing the edited mesh
-- Native GZS, BSP, and PC assembler exporters plus BSP diagnostics; the recovered
+- Native GZS, BSP, and PC assembler exporters plus BSP diagnostics, with
+  two-point `Face2` line primitives retained even in line-only BSP output; the recovered
   modal Preview replaces the 560x480 editor while preserving the sidebar, uses
   the original Euler matrix/perspective and EGA selection passes, and supports
   the DOS arrow/Page Up/Page Down/angle/distance/hidden-surface/Home/frame/exit

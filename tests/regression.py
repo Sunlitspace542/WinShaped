@@ -74,6 +74,7 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
         b"palette-ui-isolation=1\n"
         b"palette-number-command=1\n"
         b"type-first=1\n"
+        b"line-edit=1\n"
         b"mirror-zero-axis=1\n"
         b"mirror-option-coupling=1\n"
         b"mirror-clone-selection=1\n"
@@ -87,6 +88,7 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
         b"render-one-vertex=1\n"
         b"frame-selection-remap=1\n"
         b"frame-actions=1\n"
+        b"frame-capacity=1\n"
     )
 
     # ReadInt fills the last free fixed polygon slot, so a loaded 3DCG's
@@ -101,6 +103,17 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
         b"3DCG\n2 1\n1 -1 -32768,1\n32767 1 -1,1\n"
         b"2 0 1 ,7 0x1 0x7\n"
     )
+
+    # The expanded animation limit accepts and preserves all 128 frames.
+    frame_source = temp / "128-frames.3dcg"
+    frame_bytes = (
+        b"3DCG\n1 128\n"
+        + b"".join(f"{frame} 0 0,1\n".encode("ascii") for frame in range(128))
+    )
+    frame_source.write_bytes(frame_bytes)
+    assert export(
+        "--export-internal", str(frame_source), temp / "128-frames-roundtrip.3dcg"
+    ) == frame_bytes
 
     # The other two accepted DOS interchange signatures have intentionally
     # different coordinate, winding, colour, and packed-type rules.
@@ -222,7 +235,7 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
     smooth_line = export(
         "--export-bsp", "smooth-line.3dcg", smooth_dir / "smooth-line.asm", cwd=smooth_dir
     )
-    contains(smooth_line, b"\tVN\t0,-0,-127\t;0-(2)\n")
+    contains(smooth_line, b"\tVN\t0,-0,-127\t;0-(2)\n", b"\tFace2\t2,-1,0,0,0,0,1\n")
     smooth_gzs = export(
         "--export-gzs", "cube.3dg", smooth_dir / "smooth-gzs.asm", cwd=smooth_dir
     )
@@ -234,6 +247,21 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
         cwd=smooth_dir,
     )
     contains(smooth_group, b"\tPointsb\t6\n", b"\tVNORMALS\t6\n")
+
+    # Two-point faces are line primitives, not disposable degenerate polygons.
+    # In particular, BSP output must retain them even with no planar BSP root.
+    line_gzs = export("--export-gzs", "two-point-face.3dcg", temp / "line.gzs")
+    contains(line_gzs, b"\tFace2\t12,-1,0,0,0,0,1\n")
+    line_bsp = export("--export-bsp", "two-point-face.3dcg", temp / "line.bsp")
+    contains(
+        line_bsp,
+        b"line_f1\tFaces\n",
+        b"\tFace2\t12,-1,0,0,0,0,1\n",
+        b"\tFend\n\tEndShape\n",
+    )
+    assert b"\tBSPInit\t" not in line_bsp
+    line_pc = export("--export-pc", "two-point-face.3dcg", temp / "line.pc")
+    contains(line_pc, b"\tDW\tCMD_LINE_FV,12")
 
     # A single mutually crossing pair is still a DOS flat leaf. DoBSP reports
     # cuts diagnostically but never manufactures intersection geometry.

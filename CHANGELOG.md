@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 1.0.1 - 2026-08-22
+
+- Raised the animation limit from 16 to 128 frames across loading, editing,
+  Preview, saving, and all deterministic exporters.
+- Retained two-point faces in BSP assembler output, including line-only shapes,
+  and enabled line faces for Type, Sel vert, and Flip polygon operations.
 - Added a complete illustrated user guide with 59 native-build screenshots,
   covering every editor menu, modeling workflow, transform, animation feature,
   Preview control, format, exporter, SNES data path, keyboard shortcut, CLI

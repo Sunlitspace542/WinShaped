@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(shaped_native VERSION 1.0.0 LANGUAGES C RC)
+project(shaped_native VERSION 1.0.1 LANGUAGES C RC)
 
 add_executable(shaped WIN32
     src/main.c

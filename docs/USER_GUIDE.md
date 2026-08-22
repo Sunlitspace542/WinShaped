@@ -1,6 +1,6 @@
 # SHAPED Native 1.0 User Guide
 
-This manual covers the complete user-facing feature set of SHAPED Native 1.0.0:
+This manual covers the complete user-facing feature set of SHAPED Native 1.0.1:
 installation, editor controls, every sidebar menu, model construction,
 transforms, animation, Preview, file formats, assembler export, command-line
 automation, diagnostics, and the recovered SNES-development paths.
@@ -11,7 +11,7 @@ before using it on important work.
 
 Every screenshot in this manual was captured from the native Windows build.
 The figures show the exact button colors, menus, prompts, selectors, and status
-messages you will see in version 1.0.0.
+messages you will see in version 1.0.1.
 
 ## Contents
 
@@ -115,7 +115,7 @@ model data or a selection before they can be used.*
 - A **polygon** is an ordered list of 1 to 16 dot indices. One-vertex dot
   primitives and two-vertex line primitives are valid.
 - Polygon winding is determined by the dot selection/order used to create it.
-- A model can have up to 16 animation frames. Coordinates and active/selection
+- A model can have up to 128 animation frames. Coordinates and active/selection
   flags are stored per frame.
 - Eight polygon groups control editing assignment and visibility.
 
@@ -295,7 +295,7 @@ plane classification and BSP-oriented workflows.*
 | colour | Set the color of selected polygons, from 0 through 255. |
 | Sort | Apply the recovered line/type/normal-magnitude polygon ordering. |
 | Draw last | Move selected polygons to the end in the recovered reverse-selected order. |
-| Sel vert | Select every vertex used by selected polygons with three or more vertices. |
+| Sel vert | Select every vertex used by selected line/polygon faces with two or more vertices. |
 
 `Rot vert` does not create a new Undo snapshot, matching the recovered DOS
 callback. Save before using it if you need a guaranteed rollback point.
@@ -317,9 +317,9 @@ The `Poly` row is the inert base marker. The five toggleable attribute bits are:
 | Plane | `0x10` | Plane/type ordering class. |
 | BSP Node | `0x20` | BSP candidate weighting; receives a 25x splitter score. |
 
-Opening `Type` initializes the menu from the first selected polygon with at
-least three vertices in fixed slot order. Changing a flag updates the current
-default and all eligible selected polygons. The initial default type is `7`.
+Opening `Type` initializes the menu from the first selected face with at least
+two vertices in fixed slot order. Changing a flag updates the current default
+and all eligible selected line/polygon faces. The initial default type is `7`.
 
 ![Polygon Type submenu with the active type flags highlighted](images/polygon-type-menu.png)
 
@@ -614,7 +614,7 @@ for new or regrouped content and also isolates that group.*
 
 ### Frame model
 
-A shape can contain 1 to 16 frames. Frame navigation wraps at both ends.
+A shape can contain 1 to 128 frames. Frame navigation wraps at both ends.
 Visiting a frame clears that frame's old dot selection flags and reapplies the
 global ordered dot selection to the same dot indices.
 
@@ -631,7 +631,7 @@ global ordered dot selection to the same dot indices.
 | Copy to frame | Copy current frame data to the entered one-based destination. Frame 1 is not accepted as a destination. |
 | Show all | Overlay dot records from every frame once in cyclic next-frame order, drawing the current frame last. |
 
-The model is limited to 16 frames. Show-all ends when the next ordinary input
+The model is limited to 128 frames. Show-all ends when the next ordinary input
 action is received.
 
 ![Animate submenu](images/animation-menu.png)
@@ -753,9 +753,9 @@ All interactive loads and saves use the recovered five-column selector.
 | Signature | Name | Frames | Main characteristics |
 |---|---|---:|---|
 | `3DG1` | M3D | 1 | Dots plus vertex lists and colors; current default type/group applied. |
-| `3DCG` | Internal | 1-16 | Full frame flags, polygon color, flags, type, and selection metadata. |
-| `3DAN` | Animation | 1-16 | Per-frame dots and packed polygon color/type. |
-| `3DA1` | SAMS animation | 1-16 | Fixed plus animated dots, SAMS Y negation, winding reversal, and packed type table. |
+| `3DCG` | Internal | 1-128 | Full frame flags, polygon color, flags, type, and selection metadata. |
+| `3DAN` | Animation | 1-128 | Per-frame dots and packed polygon color/type. |
+| `3DA1` | SAMS animation | 1-128 | Fixed plus animated dots, SAMS Y negation, winding reversal, and packed type table. |
 
 Coordinates are stored with signed 16-bit DOS semantics: values are truncated
 toward zero and wrapped to the low 16 bits.
@@ -807,8 +807,9 @@ point compression, group-center points, and animated jump tables.
 
 BSP emits a flat ordered face leaf for ordinary/coplanar shapes and creates BSP
 partition records only when conflicting ordering constraints require a genuine
-splitter. The interactive command exports without the legacy batch compaction
-step.
+splitter. Two-point faces are retained as `Face2` line primitives in the first
+face block, including line-only shapes that have no planar BSP root. The
+interactive command exports without the legacy batch compaction step.
 
 ### ASM PC
 
@@ -1064,7 +1065,7 @@ if ($LASTEXITCODE -ne 0) {
 | Dot slots | 500 |
 | Polygon slots | 500 |
 | Vertices per polygon | 16 |
-| Animation frames | 16 |
+| Animation frames | 128 |
 | Key-animation control dots | 16 |
 | Polygon groups | 8 |
 | Polygon color | 0-255 |
@@ -1154,5 +1155,5 @@ hardware downloader.
 
 ### SmartScreen warns about the EXE
 
-Version 1.0.0 is not Authenticode-signed. Download it from the official GitHub
+Version 1.0.1 is not Authenticode-signed. Download it from the official GitHub
 release and compare its SHA-256 digest with `SHA256SUMS.txt` before running.
