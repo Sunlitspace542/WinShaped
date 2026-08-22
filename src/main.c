@@ -1836,13 +1836,11 @@ static void write_asm_vizis(FILE *f) {
         Poly *p = &g_shape.polys[i];
         if (!p->flags || p->count <= 2)
             continue;
-        double n[3];
-        poly_normal(p, n);
-        fprintf(f, "\tViz\t%u,%u,%u,%.0f,%.0f,%.0f\t;%llu\n", p->index[0], p->index[1], p->index[2], n[0], n[1], n[2], (unsigned long long)i);
+        fprintf(f, "\tViz\t%u,%u,%u\t;%llu\n", p->index[0], p->index[1], p->index[2], (unsigned long long)i);
     }
     // Create dummy vizi if there are none (fixes crash for models composed of all lines)
     if (count == 0) {
-        fprintf(f, "\tViz\t0,0,0,0,0,0\t; 0\n");
+        fprintf(f, "\tViz\t0,0,0\t; 0\n");
     }
 }
 static void write_asm_vertex_normals(FILE *f, const char *name, const Dot *extra, size_t extra_count) {
