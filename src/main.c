@@ -284,7 +284,7 @@ static void statusf(const wchar_t *fmt, ...) {
 
 static COLORREF ega(int n) {
     static const COLORREF c[16] = {
-        RGB(0, 0, 0), RGB(0, 0, 170), RGB(0, 170, 0), RGB(0, 170, 170), RGB(170, 0, 0), RGB(170, 0, 170), RGB(170, 85, 0), RGB(170, 170, 170),
+        RGB(0, 0, 0), RGB(0, 0, 170), RGB(0, 170, 0), RGB(0, 170, 170), RGB(170, 0, 0), RGB(170, 0, 170), RGB(128, 128, 0), RGB(170, 170, 170),
         RGB(85, 85, 85), RGB(85, 85, 255), RGB(85, 255, 85), RGB(85, 255, 255), RGB(255, 85, 85), RGB(255, 85, 255), RGB(255, 255, 85), RGB(255, 255, 255)};
     return c[n & 15];
 }
