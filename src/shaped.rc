@@ -32,3 +32,5 @@ BEGIN
         VALUE "Translation", 0x0409, 1200
     END
 END
+
+2 ICON icon.ico

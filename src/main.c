@@ -5877,6 +5877,7 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE prev, PWSTR cmd, int show) {
     wc.lpszClassName = L"ShapedNative";
     wc.hCursor = LoadCursorW(NULL, IDC_CROSS);
     wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wc.hIcon = LoadIcon(hi, MAKEINTRESOURCE(2));
     RegisterClassW(&wc);
     RECT wr = {0, 0, 640, 480};
     AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
