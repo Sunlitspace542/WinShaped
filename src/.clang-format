@@ -1,0 +1,21 @@
+Language: C
+
+# Indent lines.
+IndentWidth: 4
+
+# Don't rearrange includes.
+SortIncludes:
+  Enabled: false
+
+# Don't make potentially semantic transformations.
+RemoveBracesLLVM: false
+RemoveParentheses: Leave
+
+# Keep macros as intact as possible.
+SkipMacroDefinitionBody: true
+
+# Don't aggressively collapse/expand things.
+ColumnLimit: 0
+
+# Preserve existing choices where possible.
+DerivePointerAlignment: true
