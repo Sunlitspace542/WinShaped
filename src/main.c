@@ -1829,7 +1829,7 @@ static void write_asm_vizis(FILE *f) {
     if (count != 0) {
         fprintf(f, "\tVizis\t%llu\n", (unsigned long long)count);
     } else {
-    // Create dummy vizi if there are none (fixes crash for models composed of all lines)
+        // Create dummy vizi if there are none (fixes crash for models composed of all lines)
         fprintf(f, "\tVizis\t1\n");
     }
     for (size_t i = 0; i < g_shape.poly_count; i++) {
@@ -2018,17 +2018,6 @@ static void write_bsp_poly_face(FILE *f, size_t index) {
         fprintf(f, ",%u", p->index[j]);
     fputc('\n', f);
 }
-static int has_bsp_line_faces(void) {
-    for (size_t i = 0; i < g_shape.poly_count; i++)
-        if (g_shape.polys[i].flags && g_shape.polys[i].count == 2)
-            return 1;
-    return 0;
-}
-static void write_bsp_line_faces(FILE *f) {
-    for (size_t i = 0; i < g_shape.poly_count; i++)
-        if (g_shape.polys[i].flags && g_shape.polys[i].count == 2)
-            write_bsp_poly_face(f, i);
-}
 static void write_bsp_faces(FILE *f, const char *name, int node, int *number) {
     if (node < 0)
         return;
@@ -2061,16 +2050,14 @@ static int save_bsp_asm_body(const wchar_t *path) {
         build_bsp();
     char name[64];
     asm_name(path, name);
-    int has_lines = has_bsp_line_faces();
     write_asm_header(f, name, NULL, 0);
     write_asm_points(f, name);
     fprintf(f, "%s_F\n", name);
     write_asm_vizis(f);
     if (g_smooth_shade)
         write_asm_vertex_normals(f, name, NULL, 0);
-    if (g_bsp_flat && (g_bsp_root >= 0 || has_lines)) {
+    if (g_bsp_flat && g_bsp_root >= 0) {
         fprintf(f, "\n%s_f1\tFaces\n", name);
-        write_bsp_line_faces(f);
         int number = 2;
         write_bsp_faces(f, name, g_bsp_root, &number);
         fputs("\tFend\n\tEndShape\n\n\tendc\n", f);
@@ -2080,7 +2067,6 @@ static int save_bsp_asm_body(const wchar_t *path) {
         write_bsp_tree(f, name, g_bsp_root, &number);
         if (g_bsp_root >= 0) {
             fprintf(f, "\n%s_f1\tFaces\n", name);
-            write_bsp_line_faces(f);
             number = 2;
             write_bsp_faces(f, name, g_bsp_root, &number);
             fprintf(f, "\tFendQ\n%s_EBSP\n\tEndShape\n\n\tendc\n", name);
@@ -2593,18 +2579,12 @@ static int save_pc_asm_body(const wchar_t *path) {
         build_bsp();
     if (g_bsp_root >= 0 && g_bsp_flat) {
         fprintf(f, "\tDW CMD_JUMP,%s_f1\n\n%s_f1\tlabel word\n", name, name);
-        for (size_t i = 0; i < g_shape.poly_count; i++)
-            if (g_shape.polys[i].flags && g_shape.polys[i].count == 2)
-                pc_write_primitive(f, &g_shape.polys[i], i, vertex_offsets, intensity_offsets, visibility_offsets);
         pc_write_flat_primitives(f, g_bsp_root, vertex_offsets, intensity_offsets, visibility_offsets);
     } else if (g_bsp_root >= 0) {
         int number = 1;
         pc_write_bsp_commands(f, name, g_bsp_root, &number, visibility_offsets);
         fprintf(f, "\n%s_f1\tlabel word\n", name);
         number = 2;
-        for (size_t i = 0; i < g_shape.poly_count; i++)
-            if (g_shape.polys[i].flags && g_shape.polys[i].count == 2)
-                pc_write_primitive(f, &g_shape.polys[i], i, vertex_offsets, intensity_offsets, visibility_offsets);
         pc_write_bsp_primitives(f, name, g_bsp_root, &number, vertex_offsets, intensity_offsets, visibility_offsets);
     } else
         for (size_t i = 0; i < g_shape.poly_count; i++)
@@ -4580,7 +4560,7 @@ static void build_bsp(void) {
         return;
     int n = 0;
     for (size_t i = 0; i < g_shape.poly_count; i++)
-        if (g_shape.polys[i].count >= 3 && g_shape.polys[i].flags)
+        if (g_shape.polys[i].count >= 2 && g_shape.polys[i].flags)
             items[n++] = (int)i;
     for (int i = 0; i < MAX_POLYS; i++) {
         g_bsp_coplanar_head[i] = -1;
