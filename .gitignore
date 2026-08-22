@@ -1,10 +1,15 @@
 # Build products and generated exports
 /build*/
+/dist/*
 *.o
 *.obj
 *.pdb
 *.ilk
 *.exe
+CMakeFiles/
+*.cmake
+*.tcl
+CMakeCache.txt
 
 # Supplied proprietary material is intentionally never published.
 /original/
