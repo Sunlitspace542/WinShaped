@@ -1,0 +1,968 @@
+{
+  "AnimMenu#shaped": {
+    "offset": "0aa6",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 0,
+        "label": "Frames",
+        "callback": "_FramesFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Key Frame",
+        "callback": "_KeyFrameAnimFunct",
+        "flags": 1024,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Shift An",
+        "callback": "123f:05d5",
+        "flags": 4096,
+        "submenu": null
+      },
+      {
+        "key": "]",
+        "label": "Next",
+        "callback": "_NextFrameFunct",
+        "flags": 4096,
+        "submenu": null
+      },
+      {
+        "key": "[",
+        "label": "Prev",
+        "callback": "_PrevFrameFunct",
+        "flags": 4096,
+        "submenu": null
+      },
+      {
+        "key": "N",
+        "label": "Add",
+        "callback": "_AddFrameFunct",
+        "flags": 0,
+        "submenu": null
+      }
+    ]
+  },
+  "BSPTestMenu#shaped": {
+    "offset": "0382",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 0,
+        "label": "Nodes",
+        "callback": "_BSPShwNodesFunct",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Xing polys",
+        "callback": "08de:3ea2",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Need 2 cut",
+        "callback": "08de:3f12",
+        "flags": 512,
+        "submenu": null
+      }
+    ]
+  },
+  "GridMenu#shaped": {
+    "offset": "05c6",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 0,
+        "label": "Grid 1",
+        "callback": "_Grid1Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 2",
+        "callback": "_Grid2Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 5",
+        "callback": "00d3:1893",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 10",
+        "callback": "00d3:18d7",
+        "flags": 50,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 15",
+        "callback": "_Grid15Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 20",
+        "callback": "00d3:195f",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 30",
+        "callback": "_Grid30Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 50",
+        "callback": "_Grid50Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 100",
+        "callback": "_Grid100Funct",
+        "flags": 50,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 150",
+        "callback": "_Grid150Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 200",
+        "callback": "00d3:1ab4",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 300",
+        "callback": "_Grid300Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 500",
+        "callback": "_Grid500Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 1000",
+        "callback": "_Grid1000Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Grid 2000",
+        "callback": "_Grid2000Funct",
+        "flags": 48,
+        "submenu": null
+      }
+    ]
+  },
+  "GroupMenu#shaped": {
+    "offset": "0a14",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": "G",
+        "label": "Regroup",
+        "callback": "00d3:09e8",
+        "flags": 2048,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Displayed",
+        "callback": null,
+        "flags": 0,
+        "submenu": "2adf:09c4"
+      },
+      {
+        "key": 0,
+        "label": "Set",
+        "callback": null,
+        "flags": 0,
+        "submenu": "2adf:0916"
+      }
+    ]
+  },
+  "KeyOnlyMenu#shaped": {
+    "offset": "1196",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 19200,
+        "label": "",
+        "callback": "_OrgLeftFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 19712,
+        "label": "",
+        "callback": "_OrgRightFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 18432,
+        "label": "",
+        "callback": "_OrgUpFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 20480,
+        "label": "",
+        "callback": "_OrgDownFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 18176,
+        "label": "",
+        "callback": "_HomeOrgFunct",
+        "flags": 0,
+        "submenu": null
+      }
+    ]
+  },
+  "MainMenu#shaped": {
+    "offset": "113c",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": ".",
+        "label": "Select",
+        "callback": "_DotModeFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Plane Wt",
+        "callback": "00d3:16d7",
+        "flags": 0,
+        "submenu": "2adf:087c"
+      },
+      {
+        "key": 0,
+        "label": "Grid",
+        "callback": "_GridMenuUpdate",
+        "flags": 0,
+        "submenu": "2adf:05c6"
+      },
+      {
+        "key": 0,
+        "label": "Groups",
+        "callback": null,
+        "flags": 0,
+        "submenu": "2adf:0a14"
+      },
+      {
+        "key": 0,
+        "label": "Polygons",
+        "callback": null,
+        "flags": 256,
+        "submenu": "2adf:07c2"
+      },
+      {
+        "key": "M",
+        "label": "Move",
+        "callback": "_MoveFunct",
+        "flags": 3072,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Copy",
+        "callback": "_CopyFunct",
+        "flags": 3072,
+        "submenu": null
+      },
+      {
+        "key": " ",
+        "label": "Clear",
+        "callback": "_ClearSelectFunct",
+        "flags": 3072,
+        "submenu": null
+      },
+      {
+        "key": "A",
+        "label": "All Dots",
+        "callback": "_SelectAllFunct",
+        "flags": 256,
+        "submenu": null
+      },
+      {
+        "key": 21248,
+        "label": "Del Dot",
+        "callback": "_DelDotFunct",
+        "flags": 1024,
+        "submenu": null
+      },
+      {
+        "key": "Z",
+        "label": "Size",
+        "callback": "_ScaleFunct",
+        "flags": 256,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Zoom",
+        "callback": null,
+        "flags": 0,
+        "submenu": "2adf:032c"
+      },
+      {
+        "key": 0,
+        "label": "SNES",
+        "callback": null,
+        "flags": 8192,
+        "submenu": "2adf:0ee2"
+      },
+      {
+        "key": 0,
+        "label": "Show",
+        "callback": null,
+        "flags": 512,
+        "submenu": "2adf:0f1c"
+      },
+      {
+        "key": "L",
+        "label": "Load",
+        "callback": "_LoadFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Save",
+        "callback": null,
+        "flags": 256,
+        "submenu": "2adf:044e"
+      },
+      {
+        "key": 0,
+        "label": "Animate",
+        "callback": null,
+        "flags": 0,
+        "submenu": "2adf:0aa6"
+      },
+      {
+        "key": 0,
+        "label": "Mirror",
+        "callback": "_MirrorXYZFunct",
+        "flags": 256,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Rotate",
+        "callback": "_RotateFunct",
+        "flags": 3072,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Compact",
+        "callback": "00d3:2188",
+        "flags": 256,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Test",
+        "callback": null,
+        "flags": 0,
+        "submenu": "2adf:03b6"
+      },
+      {
+        "key": "U",
+        "label": "Undo",
+        "callback": "_UnDoFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": "X",
+        "label": "NEW",
+        "callback": "_NewFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": "Q",
+        "label": "QUIT",
+        "callback": "_ExitFunct",
+        "flags": 0,
+        "submenu": null
+      }
+    ]
+  },
+  "PlaneWMenu#shaped": {
+    "offset": "087c",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 0,
+        "label": "0.001",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "0.01",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "0.1",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "0.5",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "1",
+        "callback": "_SetPlaneFunct",
+        "flags": 50,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "2",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "5",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "10",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "100",
+        "callback": "_SetPlaneFunct",
+        "flags": 48,
+        "submenu": null
+      }
+    ]
+  },
+  "PolyMenu#shaped": {
+    "offset": "07c2",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": "P",
+        "label": "Create",
+        "callback": "_AddPolyFunct",
+        "flags": 1024,
+        "submenu": null
+      },
+      {
+        "key": "S",
+        "label": "Select",
+        "callback": "_SelectPolyFunct",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Deselect",
+        "callback": "_DeselectPolyFunct",
+        "flags": 2048,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Type",
+        "callback": "_TypeMenuUpdate",
+        "flags": 2048,
+        "submenu": "2adf:065c"
+      },
+      {
+        "key": 17152,
+        "label": "Prev",
+        "callback": "00d3:0893",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": 17408,
+        "label": "Next",
+        "callback": "_NextPolyFunct",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": "V",
+        "label": "Select by",
+        "callback": "_SelectPolysFunct",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": "F",
+        "label": "Flip",
+        "callback": "_FlipPolyFunct",
+        "flags": 2048,
+        "submenu": null
+      },
+      {
+        "key": "O",
+        "label": "Rot vert",
+        "callback": "_RotPolyFunct",
+        "flags": 2048,
+        "submenu": null
+      },
+      {
+        "key": "D",
+        "label": "Delete",
+        "callback": "_DelPolyFunct",
+        "flags": 2048,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Dft Col",
+        "callback": "00d3:6c4f",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": "C",
+        "label": "colour",
+        "callback": "_ColPolyFunct",
+        "flags": 2048,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Sort",
+        "callback": "_SortPolysFunct",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": "E",
+        "label": "Draw last",
+        "callback": "_PolyToEndFunct",
+        "flags": 2048,
+        "submenu": null
+      },
+      {
+        "key": 9,
+        "label": "Sel vert",
+        "callback": "_SelPolyVertFunct",
+        "flags": 2048,
+        "submenu": null
+      }
+    ]
+  },
+  "SNESMenu#shaped": {
+    "offset": "0ee2",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 13,
+        "label": "Send SNES",
+        "callback": "08de:2fc1",
+        "flags": 8704,
+        "submenu": null
+      },
+      {
+        "key": "T",
+        "label": "Col Table",
+        "callback": "00d3:68bf",
+        "flags": 8192,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Palette",
+        "callback": null,
+        "flags": 8192,
+        "submenu": "2adf:0e40"
+      },
+      {
+        "key": 0,
+        "label": "Pal num",
+        "callback": null,
+        "flags": 8192,
+        "submenu": "2adf:0b40"
+      },
+      {
+        "key": 0,
+        "label": "Textures",
+        "callback": null,
+        "flags": 8192,
+        "submenu": "2adf:0cc0"
+      },
+      {
+        "key": 0,
+        "label": "BSP DEBUG",
+        "callback": "08de:19a3",
+        "flags": 8208,
+        "submenu": null
+      }
+    ]
+  },
+  "SaveMenu#shaped": {
+    "offset": "044e",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": "W",
+        "label": "Internal",
+        "callback": "_SaveIntFunct",
+        "flags": 256,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "3DCG  ",
+        "callback": "_SaveAsIntFunct",
+        "flags": 256,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "3DG1  ",
+        "callback": "_SaveAsM3dFunct",
+        "flags": 256,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "ASM GZS",
+        "callback": "0d79:40d1",
+        "flags": 8448,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "ASM BSP",
+        "callback": "_SaveBSPFunct",
+        "flags": 8448,
+        "submenu": null
+      },
+      {
+        "key": "=",
+        "label": "ASM PC",
+        "callback": "_SavePCFunct",
+        "flags": 256,
+        "submenu": null
+      }
+    ]
+  },
+  "SetGroupMenu#shaped": {
+    "offset": "0916",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 15104,
+        "label": "1",
+        "callback": "_Set1Funct",
+        "flags": 50,
+        "submenu": null
+      },
+      {
+        "key": 15360,
+        "label": "2",
+        "callback": "_Set2Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 15616,
+        "label": "3",
+        "callback": "_Set3Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 15872,
+        "label": "4",
+        "callback": "_Set4Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 16128,
+        "label": "5",
+        "callback": "00d3:0304",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 16384,
+        "label": "6",
+        "callback": "00d3:0323",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 16640,
+        "label": "7",
+        "callback": "00d3:0342",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": 16896,
+        "label": "8",
+        "callback": "_Set8Funct",
+        "flags": 48,
+        "submenu": null
+      }
+    ]
+  },
+  "ShowGroupMenu#shaped": {
+    "offset": "09c4",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": "0",
+        "label": "All",
+        "callback": "_ShowAllFunct",
+        "flags": 50,
+        "submenu": null
+      },
+      {
+        "key": "1",
+        "label": "1",
+        "callback": "_Show1Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": "2",
+        "label": "2",
+        "callback": "_Show2Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": "3",
+        "label": "3",
+        "callback": "_Show3Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": "4",
+        "label": "4",
+        "callback": "_Show4Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": "5",
+        "label": "5",
+        "callback": "_Show5Funct",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": "6",
+        "label": "6",
+        "callback": "00d3:0217",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": "7",
+        "label": "7",
+        "callback": "00d3:0234",
+        "flags": 48,
+        "submenu": null
+      },
+      {
+        "key": "8",
+        "label": "8",
+        "callback": "00d3:0251",
+        "flags": 48,
+        "submenu": null
+      }
+    ]
+  },
+  "ShowMenu#shaped": {
+    "offset": "0f1c",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": "#",
+        "label": "Preview",
+        "callback": "_PreviewFunct",
+        "flags": 512,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "3D sys",
+        "callback": "_ShowPCFunct",
+        "flags": 512,
+        "submenu": null
+      }
+    ]
+  },
+  "TestMenu#shaped": {
+    "offset": "03b6",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 0,
+        "label": "BSP",
+        "callback": null,
+        "flags": 512,
+        "submenu": "2adf:0382"
+      },
+      {
+        "key": 0,
+        "label": "Twist",
+        "callback": "_TwistTestFunct",
+        "flags": 512,
+        "submenu": null
+      }
+    ]
+  },
+  "TypeMenu#shaped": {
+    "offset": "065c",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 0,
+        "label": "Poly",
+        "callback": "_TypePolyFunct",
+        "flags": 16,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Light S",
+        "callback": "_TypeLSFunct",
+        "flags": 16,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Vis Tst",
+        "callback": "00d3:05ce",
+        "flags": 16,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Z Clip",
+        "callback": "00d3:064f",
+        "flags": 16,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "Plane",
+        "callback": "00d3:06d0",
+        "flags": 16,
+        "submenu": null
+      },
+      {
+        "key": 0,
+        "label": "BSP Node",
+        "callback": "00d3:0751",
+        "flags": 16,
+        "submenu": null
+      }
+    ]
+  },
+  "ZoomMenu#shaped": {
+    "offset": "032c",
+    "flags": 0,
+    "state": 0,
+    "buttons": [
+      {
+        "key": 20736,
+        "label": "Zoom Up",
+        "callback": "_ScaleUpFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": 18688,
+        "label": "Zoom Dwn",
+        "callback": "_ScaleDownFunct",
+        "flags": 0,
+        "submenu": null
+      },
+      {
+        "key": "*",
+        "label": "Auto Zoom",
+        "callback": "_AutoScaleFunct",
+        "flags": 0,
+        "submenu": null
+      }
+    ]
+  }
+}

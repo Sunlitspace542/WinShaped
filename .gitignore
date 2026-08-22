@@ -1,0 +1,29 @@
+# Build products and generated exports
+/build*/
+*.o
+*.obj
+*.pdb
+*.ilk
+*.exe
+
+# Supplied proprietary material is intentionally never published.
+/original/
+*.7z
+
+# Keep only the authored recovery documentation and native reference capture.
+/reverse/*
+!/reverse/FORMATS.md
+!/reverse/SNES.md
+!/reverse/function-inventory.txt
+!/reverse/menus.json
+!/reverse/native-ui-current.png
+
+# Do not publish locally bundled third-party emulators/toolchains or archives.
+/tools/*
+!/tools/*.py
+
+# Editor/OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
