@@ -7,7 +7,7 @@ CFLAGS  := -std=c11 -Wall -Wextra -Wpedantic \
 LDFLAGS := -static -static-libgcc -municode -mwindows
 LDLIBS  := -lgdi32 -luser32
 
-TARGET  := dist/Shaped.exe
+TARGET  := dist/WinShaped.exe
 
 OBJS := \
     build/main.o \

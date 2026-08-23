@@ -935,7 +935,7 @@ static void draw_dos_prompt(HDC dc, RECT client) {
     LineTo(dc, x1, y2);
     SelectObject(dc, op);
     DeleteObject(cyan);
-    const wchar_t *title = g_dos_prompt == PROMPT_QUIT ? L"QUIT to OS" : g_dos_prompt == PROMPT_NEW ? L"Delete all"
+    const wchar_t *title = g_dos_prompt == PROMPT_QUIT ? L"QUIT to OS?" : g_dos_prompt == PROMPT_NEW ? L"Delete all"
                                                                                                     : L"Add image";
     const wchar_t *left = g_dos_prompt == PROMPT_ROTATE_ADD ? L"YES" : L"OK";
     const wchar_t *right = g_dos_prompt == PROMPT_ROTATE_ADD ? L"NO" : L"CANCEL";
@@ -5327,7 +5327,7 @@ static void command(int id) {
         }
     } else if (id == ID_FILE_EXIT) {
         g_dos_prompt = PROMPT_QUIT;
-        statusf(L"QUIT to OS");
+        statusf(L"QUIT to OS?");
     } else if (id == ID_EDIT_UNDO && g_has_undo) {
         Shape t = g_shape;
         g_shape = g_undo;
