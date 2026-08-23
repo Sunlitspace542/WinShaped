@@ -1,8 +1,8 @@
 #include <windows.h>
 
 1 VERSIONINFO
- FILEVERSION 1,0,1,0
- PRODUCTVERSION 1,0,1,0
+ FILEVERSION 1,0,2,0
+ PRODUCTVERSION 1,0,2,0
  FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
  FILEFLAGS VS_FF_DEBUG
@@ -19,12 +19,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "SHAPED native reconstruction\0"
             VALUE "FileDescription", "SHAPED native Windows reconstruction\0"
-            VALUE "FileVersion", "1.0.1.0\0"
+            VALUE "FileVersion", "1.0.2.0\0"
             VALUE "InternalName", "Shaped\0"
-            VALUE "LegalCopyright", "Copyright (c) 2026 kandowontu\0"
+            VALUE "LegalCopyright", "Copyright (c) 2026 kandowontu, Sunlit\0"
             VALUE "OriginalFilename", "Shaped.exe\0"
             VALUE "ProductName", "SHAPED Native\0"
-            VALUE "ProductVersion", "1.0.1\0"
+            VALUE "ProductVersion", "1.0.2\0"
         END
     END
     BLOCK "VarFileInfo"
