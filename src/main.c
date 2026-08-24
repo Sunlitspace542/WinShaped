@@ -5862,7 +5862,7 @@ int WINAPI wWinMain(HINSTANCE hi, HINSTANCE prev, PWSTR cmd, int show) {
     wc.hInstance = hi;
     wc.lpfnWndProc = wndproc;
     wc.lpszClassName = L"ShapedNative";
-    wc.hCursor = LoadCursorW(NULL, IDC_CROSS);
+    wc.hCursor = LoadCursorW(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
     wc.hIcon = LoadIcon(hi, MAKEINTRESOURCE(2));
     RegisterClassW(&wc);
