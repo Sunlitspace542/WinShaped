@@ -21,12 +21,32 @@
 #define MAX_SNES_ENTRIES 24
 #define _snwprintf swprintf
 
-typedef struct { double x, y, z; uint8_t selected; } Dot;
-typedef struct { double x, y, z; uint16_t active; } FrameDot;
-typedef struct { uint16_t count, index[MAX_POLY_VERTS], colour, type, flags; uint8_t selected; } Poly;
-typedef struct { Dot dots[MAX_DOTS]; Poly polys[MAX_POLYS]; FrameDot *frames[MAX_FRAMES]; size_t dot_count, poly_count, frame_count; } Shape;
-typedef struct { int poly, front, back, leaf; } BSPNode;
-typedef struct { char name[50]; wchar_t label[50]; int value; } SNESEntry;
+typedef struct {
+    double x, y, z;
+    uint8_t selected;
+} Dot;
+typedef struct {
+    double x, y, z;
+    uint16_t active;
+} FrameDot;
+typedef struct {
+    uint16_t count, index[MAX_POLY_VERTS], colour, type, flags;
+    uint8_t selected;
+} Poly;
+typedef struct {
+    Dot dots[MAX_DOTS];
+    Poly polys[MAX_POLYS];
+    FrameDot *frames[MAX_FRAMES];
+    size_t dot_count, poly_count, frame_count;
+} Shape;
+typedef struct {
+    int poly, front, back, leaf;
+} BSPNode;
+typedef struct {
+    char name[50];
+    wchar_t label[50];
+    int value;
+} SNESEntry;
 
 static Shape g_shape;
 static size_t g_current_frame;
@@ -41,7 +61,8 @@ static int g_coltab_count, g_coltab_index, g_smooth_shade;
 
 static FILE *portable_wfopen(const wchar_t *path, const wchar_t *mode) {
     char narrow[MAX_PATH], flags[8];
-    if (wcstombs(narrow, path, sizeof(narrow)) == (size_t)-1 || wcstombs(flags, mode, sizeof(flags)) == (size_t)-1) return NULL;
+    if (wcstombs(narrow, path, sizeof(narrow)) == (size_t)-1 || wcstombs(flags, mode, sizeof(flags)) == (size_t)-1)
+        return NULL;
     return fopen(narrow, flags);
 }
 /* C text streams only translate newlines on Windows. Normalize explicitly so
@@ -1731,43 +1752,70 @@ static int is_bsp_switch(const char *arg) {
 static int to_wide(const char *input, wchar_t output[MAX_PATH]) { return mbstowcs(output, input, MAX_PATH) != (size_t)-1; }
 static int derive_asm_path(const char *input, char output[MAX_PATH]) {
     size_t length = strlen(input);
-    if (!length || length >= MAX_PATH) return 0;
+    if (!length || length >= MAX_PATH)
+        return 0;
     const char *leaf = input, *dot = NULL;
     for (const char *p = input; *p; ++p) {
-        if (*p == '/' || *p == '\\') { leaf = p + 1; dot = NULL; }
-        else if (*p == '.') dot = p;
+        if (*p == '/' || *p == '\\') {
+            leaf = p + 1;
+            dot = NULL;
+        } else if (*p == '.')
+            dot = p;
     }
     size_t stem = (size_t)((dot && dot > leaf ? dot : input + length) - input);
-    if (stem + 4 >= MAX_PATH) return 0;
+    if (stem + 4 >= MAX_PATH)
+        return 0;
     memcpy(output, input, stem);
     memcpy(output + stem, ".asm", 5);
     return 1;
 }
 static int export_shape(const char *mode, const char *input, const char *output) {
     wchar_t wide_input[MAX_PATH], wide_output[MAX_PATH];
-    if (!to_wide(input, wide_input) || !to_wide(output, wide_output) || !load_shape(wide_input)) return 0;
-    if (!strcasecmp(mode, "--export-gzs")) return save_gzs(wide_output);
-    if (!strcasecmp(mode, "--export-bsp") || !strcasecmp(mode, "--bsp") || !strcasecmp(mode, "-b")) return save_bsp_asm(wide_output);
-    if (!strcasecmp(mode, "--export-pc")) return save_pc_asm(wide_output);
-    if (!strcasecmp(mode, "--export-internal")) return save_internal(wide_output);
-    if (!strcasecmp(mode, "--export-3dg1")) return save_shape(wide_output);
-    if (!strcasecmp(mode, "--test-twist")) return save_twist_report(wide_output);
+    if (!to_wide(input, wide_input) || !to_wide(output, wide_output) || !load_shape(wide_input))
+        return 0;
+    if (!strcasecmp(mode, "--export-gzs"))
+        return save_gzs(wide_output);
+    if (!strcasecmp(mode, "--export-bsp") || !strcasecmp(mode, "--bsp") || !strcasecmp(mode, "-b"))
+        return save_bsp_asm(wide_output);
+    if (!strcasecmp(mode, "--export-pc"))
+        return save_pc_asm(wide_output);
+    if (!strcasecmp(mode, "--export-internal"))
+        return save_internal(wide_output);
+    if (!strcasecmp(mode, "--export-3dg1"))
+        return save_shape(wide_output);
+    if (!strcasecmp(mode, "--test-twist"))
+        return save_twist_report(wide_output);
     return 0;
 }
 static void print_usage(FILE *stream) {
     fprintf(stream, "Usage: shaped <command> <input> [output]\n\nCommands:\n  --export-gzs input output\n  --export-bsp input [output]  (--bsp and -b are aliases)\n  --export-pc input output\n  --export-internal input output\n  --export-3dg1 input output\n  --test-twist input output\n");
 }
 int main(int argc, char **argv) {
-    if (argc == 2 && (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-?") || !strcmp(argv[1], "-h"))) { print_usage(stdout); return 0; }
-    if (argc < 3 || argc > 4) { print_usage(stderr); return 2; }
+    if (argc == 2 && (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-?") || !strcmp(argv[1], "-h"))) {
+        print_usage(stdout);
+        return 0;
+    }
+    if (argc < 3 || argc > 4) {
+        print_usage(stderr);
+        return 2;
+    }
     const char *output = argc == 4 ? argv[3] : NULL;
     char derived[MAX_PATH];
     if (!output && is_bsp_switch(argv[1])) {
-        if (!derive_asm_path(argv[2], derived)) { fputs("Could not derive output path.\n", stderr); return 2; }
+        if (!derive_asm_path(argv[2], derived)) {
+            fputs("Could not derive output path.\n", stderr);
+            return 2;
+        }
         output = derived;
     }
-    if (!output) { fputs("This command requires an output path.\n", stderr); return 2; }
+    if (!output) {
+        fputs("This command requires an output path.\n", stderr);
+        return 2;
+    }
     load_colour_tables_path(L"COLTABS.DAT");
-    if (!export_shape(argv[1], argv[2], output)) { fprintf(stderr, "Export failed: %s\n", argv[2]); return 1; }
+    if (!export_shape(argv[1], argv[2], output)) {
+        fprintf(stderr, "Export failed: %s\n", argv[2]);
+        return 1;
+    }
     return 0;
 }
