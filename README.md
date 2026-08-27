@@ -1,4 +1,29 @@
-# Shaped native Windows reconstruction
+# Shaped CLI
+
+This repository now builds a portable, command-line-only exporter. The former
+Windows editor, its resource file, and GUI dependencies are not part of the
+build. The CLI reads `3DG1`, `3DCG`, `3DAN`, and `3DA1` shapes and exports:
+
+```text
+shaped --export-gzs input output
+shaped --export-bsp input [output]
+shaped --export-pc input output
+shaped --export-internal input output
+shaped --export-3dg1 input output
+shaped --test-twist input output
+```
+
+`--bsp` and `-b` remain BSP aliases. When no output is supplied to a BSP
+command, the input extension is replaced with `.asm`.
+
+All generated text formats use CRLF line endings, including when the CLI runs
+on Linux.
+
+Build with CMake (`cmake -S . -B build && cmake --build build`) or `make` on a
+POSIX system. The executable is a standard console program and requires only a
+C11 compiler and the math library.
+
+# Original project notes
 
 Version 1.0.1
 

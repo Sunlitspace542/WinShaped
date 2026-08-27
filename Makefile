@@ -1,17 +1,22 @@
-CC      := gcc
-WINDRES := windres
+OS := $(shell uname -s)
+CC      ?= cc
+RC ?= windres
 
-CFLAGS  := -std=c11 -Wall -Wextra -Wpedantic \
-           -DUNICODE -D_UNICODE -DWIN32_LEAN_AND_MEAN
+CFLAGS  := -std=c11 -Wall -Wextra -Wpedantic
 
-LDFLAGS := -static -static-libgcc -municode -mwindows
-LDLIBS  := -lgdi32 -luser32
+LDLIBS  := -lm
 
-TARGET  := dist/WinShaped.exe
+TARGET  := dist/shaped
 
+ifeq ($(OS),Linux)
+OBJS := \
+    build/main.o
+else
+TARGET := dist/shaped.exe
 OBJS := \
     build/main.o \
     build/shaped.res.o
+endif
 
 .PHONY: all clean
 
@@ -27,7 +32,7 @@ build/main.o: src/main.c
 
 build/shaped.res.o: src/shaped.rc
 	@mkdir -p build
-	$(WINDRES) $< -O coff -o $@
+	$(RC) $< -O coff -o $@
 
 clean:
 	rm -rf build dist

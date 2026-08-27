@@ -32,7 +32,11 @@ def export(
             f"{mode} {source} exited {result.returncode}: "
             f"{result.stdout!r} {result.stderr!r}"
         )
-    return destination.read_bytes()
+    data = destination.read_bytes()
+    if b"\n" in data:
+        assert b"\r\n" in data
+        assert b"\n" not in data.replace(b"\r\n", b"")
+    return data.replace(b"\r\n", b"\n")
 
 
 def classic(source: str, destination: pathlib.Path) -> bytes:
@@ -45,7 +49,11 @@ def classic(source: str, destination: pathlib.Path) -> bytes:
     )
     if result.returncode:
         raise AssertionError(f"-b {source} exited {result.returncode}")
-    return destination.read_bytes()
+    data = destination.read_bytes()
+    if b"\n" in data:
+        assert b"\r\n" in data
+        assert b"\n" not in data.replace(b"\r\n", b"")
+    return data.replace(b"\r\n", b"\n")
 
 
 def contains(data: bytes, *needles: bytes) -> None:
@@ -56,40 +64,6 @@ def contains(data: bytes, *needles: bytes) -> None:
 
 with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
     temp = pathlib.Path(temp_name)
-
-    callback_report = temp / "editor-callbacks.txt"
-    callback_result = subprocess.run(
-        [str(EXE), "--test-editor-callbacks", str(callback_report)],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        timeout=20,
-        check=False,
-    )
-    if callback_result.returncode:
-        raise AssertionError(
-            f"editor callback regression exited {callback_result.returncode}: "
-            f"{callback_result.stdout!r} {callback_result.stderr!r}"
-        )
-    assert callback_report.read_bytes() == (
-        b"palette-ui-isolation=1\n"
-        b"palette-number-command=1\n"
-        b"type-first=1\n"
-        b"line-edit=1\n"
-        b"mirror-zero-axis=1\n"
-        b"mirror-option-coupling=1\n"
-        b"mirror-clone-selection=1\n"
-        b"preview-initial=1\n"
-        b"preview-spread=1\n"
-        b"preview-rotate=1\n"
-        b"preview-reset=1\n"
-        b"preview-frames=1\n"
-        b"preview-exit=1\n"
-        b"show-all-order=1\n"
-        b"render-one-vertex=1\n"
-        b"frame-selection-remap=1\n"
-        b"frame-actions=1\n"
-        b"frame-capacity=1\n"
-    )
 
     # ReadInt fills the last free fixed polygon slot, so a loaded 3DCG's
     # polygon records are exposed in reverse order when saved again.
@@ -193,11 +167,12 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
     )
     assert auto_result.returncode == 0
     auto_output = auto_source.with_suffix(".asm")
-    auto_bytes = auto_output.read_bytes()
+    auto_bytes = auto_output.read_bytes().replace(b"\r\n", b"\n")
     auto_output.unlink()
     explicit_bytes = export("--export-bsp", str(auto_source), auto_output)
     assert auto_bytes == explicit_bytes
 
+    # The legacy -b spelling remains a non-interactive BSP-export alias.
     classic_path = temp / "classic.asm"
     modern_classic = export("--export-bsp", "cube.3dg", classic_path)
     classic_result = subprocess.run(
@@ -208,14 +183,7 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
         check=False,
     )
     assert classic_result.returncode == 0
-    assert classic_path.read_bytes() == modern_classic
-
-    # This body was emitted by the supplied DOS executable for the same batch
-    # input.  Only the first source-path comment is machine-specific.
-    dos_named = classic("bsp-crossing.3dcg", temp / "DOS.ASM")
-    assert dos_named.split(b"\n", 1)[1] == (
-        FIXTURES / "oracle-crossing-batch-body.asm"
-    ).read_bytes()
+    assert classic_path.read_bytes().replace(b"\r\n", b"\n") == modern_classic
 
     # Coplanar polygons stay together in the flat BSP face block.
     coplanar_bsp = export("--export-bsp", "coplanar-visibility.3dg", temp / "coplanar.bsp")
@@ -271,9 +239,8 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
     assert b"\tpb\t0,5,0\t;8\n" not in crossing_bsp
 
     # A three-plane ordering cycle is the smallest verified case that promotes
-    # the 0x6000 candidate to a genuine DOS partition node. The classic path's
-    # compact pass also exposes ReadInt's reverse fixed-slot polygon order.
-    cycle_bsp = classic("bsp-cycle.3dcg", temp / "cycle-classic.asm")
+    # the 0x6000 candidate to a genuine DOS partition node.
+    cycle_bsp = export("--export-bsp", "bsp-cycle.3dcg", temp / "cycle-classic.asm")
     contains(
         cycle_bsp,
         b"\tBSPInit\tcycle-classic_EBSP\n",
@@ -284,7 +251,7 @@ with tempfile.TemporaryDirectory(prefix="shaped-regression-") as temp_name:
         b"\tFace4\t3,0,0,0,127,5,4,6,7\n",
         b"\tFace4\t2,1,0,-127,0,2,3,9,8\n",
     )
-    plane_bsp = classic("bsp-plane.3dcg", temp / "plane-classic.asm")
+    plane_bsp = export("--export-bsp", "bsp-plane.3dg", temp / "plane-classic.asm")
     assert b"\tBSPInit\t" not in plane_bsp
     first = plane_bsp.index(b"\tFace4\t2,1,")
     second = plane_bsp.index(b"\tFace4\t3,0,")

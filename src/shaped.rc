@@ -18,12 +18,12 @@ BEGIN
         BLOCK "040904B0"
         BEGIN
             VALUE "CompanyName", "Argonaut Software Ltd.\0"
-            VALUE "FileDescription", "SHAPED for Windows\0"
+            VALUE "FileDescription", "SHAPED CLI\0"
             VALUE "FileVersion", "1.0.2.0\0"
-            VALUE "InternalName", "WinShaped\0"
+            VALUE "InternalName", "Shaped\0"
             VALUE "LegalCopyright", "(c)1991-92 Argonaut Software Ltd, (c) 2026 kandowontu/Sunlit\0"
-            VALUE "OriginalFilename", "WinShaped.exe\0"
-            VALUE "ProductName", "WinShaped\0"
+            VALUE "OriginalFilename", "Shaped.exe\0"
+            VALUE "ProductName", "SHAPED CLI\0"
             VALUE "ProductVersion", "1.0.2\0"
         END
     END
