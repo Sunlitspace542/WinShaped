@@ -1788,7 +1788,17 @@ static int export_shape(const char *mode, const char *input, const char *output)
     return 0;
 }
 static void print_usage(FILE *stream) {
-    fprintf(stream, "Usage: shaped <command> <input> [output]\n\nCommands:\n  --export-gzs input output\n  --export-bsp input [output]  (--bsp and -b are aliases)\n  --export-pc input output\n  --export-internal input output\n  --export-3dg1 input output\n  --test-twist input output\n");
+    fprintf(stream, 
+        "Usage: shaped <command> <input> [output]"
+        "\n"
+        "\n"
+        "Commands:\n"
+        "  --export-gzs input output\n"
+        "  --export-bsp input [output]  (--bsp and -b are aliases)\n"
+        "  --export-pc input output\n"
+        "  --export-internal input output\n"
+        "  --export-3dg1 input output\n"
+        "  --test-twist input output\n");
 }
 int main(int argc, char **argv) {
     if (argc == 2 && (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-?") || !strcmp(argv[1], "-h"))) {
