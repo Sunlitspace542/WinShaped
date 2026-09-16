@@ -1,8 +1,7 @@
-# Shaped CLI
+# WinShaped CLI
 
-This repository now builds a portable, command-line-only exporter. The former
-Windows editor, its resource file, and GUI dependencies are not part of the
-build. The CLI reads `3DG1`, `3DCG`, `3DAN`, and `3DA1` shapes and exports:
+This branch contains a portable, stripped down version of WinShaped containing only the model compiler portion.  
+The CLI reads `3DG1`, `3DCG`, `3DAN`, and `3DA1` shapes and exports:
 
 ```text
 shaped --export-gzs input output
@@ -10,7 +9,6 @@ shaped --export-bsp input [output]
 shaped --export-pc input output
 shaped --export-internal input output
 shaped --export-3dg1 input output
-shaped --test-twist input output
 ```
 
 `--bsp` and `-b` remain BSP aliases. When no output is supplied to a BSP
