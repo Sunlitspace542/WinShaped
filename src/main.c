@@ -1476,51 +1476,6 @@ static int load_shape(const wchar_t *path) {
     return 1;
 }
 
-static double calculate_twist_test(void) {
-    double total = 0;
-    size_t polygon_count = 0;
-    for (size_t i = 0; i < g_shape.poly_count; i++) {
-        Poly *p = &g_shape.polys[i];
-        if (!p->flags || p->count <= 2)
-            continue;
-        polygon_count++;
-        p->selected = 0;
-        double twist = 0;
-        if (p->count > 3) {
-            Dot a = display_dot(p->index[0]), b = display_dot(p->index[1]), c = display_dot(p->index[2]);
-            double ux = b.x - a.x, uy = b.y - a.y, uz = b.z - a.z, vx = c.x - a.x, vy = c.y - a.y, vz = c.z - a.z;
-            double nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
-            double magnitude = sqrt(nx * nx + ny * ny + nz * nz);
-            nx /= magnitude;
-            ny /= magnitude;
-            nz /= magnitude;
-            double plane_d = nx * a.x + ny * a.y + nz * a.z, sum = 0;
-            for (unsigned j = 0; j < p->count; j++) {
-                Dot d = display_dot(p->index[j]);
-                double distance = nx * d.x + ny * d.y + nz * d.z - plane_d;
-                sum += distance * distance;
-            }
-            twist = sum / magnitude;
-            if (twist > 0.01)
-                p->selected = 1;
-        }
-        total += twist;
-    }
-    return polygon_count ? total * 100.0 / (double)polygon_count : 0;
-}
-static int save_twist_report(const wchar_t *path) {
-    double average = calculate_twist_test();
-    FILE *f = _wfopen(path, L"wb");
-    if (!f)
-        return 0;
-    fprintf(f, "Avg twist %.6f%%\n", average);
-    fputs("Selected", f);
-    for (size_t i = 0; i < g_shape.poly_count; i++)
-        if (g_shape.polys[i].selected)
-            fprintf(f, " %llu", (unsigned long long)i);
-    fputc('\n', f);
-    return finish_text_output(path, f);
-}
 static int polygon_plane_at_frame(size_t pi, size_t frame, double plane[4]) {
     Poly *p = &g_shape.polys[pi];
     if (p->count < 3)
@@ -1783,8 +1738,6 @@ static int export_shape(const char *mode, const char *input, const char *output)
         return save_internal(wide_output);
     if (!strcasecmp(mode, "--export-3dg1"))
         return save_shape(wide_output);
-    if (!strcasecmp(mode, "--test-twist"))
-        return save_twist_report(wide_output);
     return 0;
 }
 static void print_usage(FILE *stream) {
@@ -1797,8 +1750,7 @@ static void print_usage(FILE *stream) {
         "  --export-bsp input [output]  (--bsp and -b are aliases)\n"
         "  --export-pc input output\n"
         "  --export-internal input output\n"
-        "  --export-3dg1 input output\n"
-        "  --test-twist input output\n");
+        "  --export-3dg1 input output\n");
 }
 int main(int argc, char **argv) {
     if (argc == 2 && (!strcmp(argv[1], "--help") || !strcmp(argv[1], "-?") || !strcmp(argv[1], "-h"))) {
