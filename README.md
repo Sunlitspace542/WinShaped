@@ -21,6 +21,35 @@ Build with CMake (`cmake -S . -B build && cmake --build build`) or `make` on a
 POSIX system. The executable is a standard console program and requires only a
 C11 compiler and the math library.
 
+## Python Blender integration
+
+The pure-Python library accepts the same model formats and can generate GZS,
+BSP, 3DCG, 3DG1, and twist-report output in-process. For a Blender exporter,
+set the header values explicitly and use `tree=False` to force a simple ordered
+face list without `BSP` or `BSPInit` instructions:
+
+```python
+from shaped import ShapeHeader, load, write
+
+model = load("blender-temp.3dg")
+model.header = ShapeHeader(
+    name="BLENDER_SHIP",       # separate from the output filename
+    scale="SHIP_SCALE",
+    colbox="SHIP_COLBOX",
+    colour_table="ship_c",
+    shadow="SHIP_SHADOW",
+    simple1="SHIP_LOD1",
+    simple2="SHIP_LOD2",
+    simple3="SHIP_LOD3",
+)
+write(model, "ship.asm", "bsp", tree=False)
+```
+
+Header pointers default to `0` except `colour_table`, which defaults to
+`id_0_c`. Set `simplified=True` on `ShapeHeader` (or pass
+`simplified_header=True` to `write`) to omit the `simple1`, `simple2`, and
+`simple3` LOD pointers.
+
 # Original project notes
 
 Version 1.0.1

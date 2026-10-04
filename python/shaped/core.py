@@ -71,6 +71,25 @@ class _BspNode:
 
 
 @dataclass
+class ShapeHeader:
+    """Assembler ``ShapeHdr`` fields controlled by an embedding application.
+
+    Values may be assembler labels or ``0``. ``simplified`` omits the three
+    optional LOD pointers, matching the short form used by the original tools.
+    """
+
+    name: str | None = None
+    scale: str | int = 0
+    colbox: str | int = 0
+    colour_table: str | int = "id_0_c"
+    shadow: str | int = 0
+    simple1: str | int = 0
+    simple2: str | int = 0
+    simple3: str | int = 0
+    simplified: bool = False
+
+
+@dataclass
 class Shape:
     dots: list[Dot] = field(default_factory=list)
     polygons: list[Polygon] = field(default_factory=list)
@@ -78,7 +97,7 @@ class Shape:
     source: Path | None = None
     current_frame: int = 0
     smooth_shade: bool = False
-    coltab: str = "id_0_c"
+    header: ShapeHeader = field(default_factory=ShapeHeader)
 
     def __post_init__(self) -> None:
         if len(self.dots) > MAX_DOTS or len(self.polygons) > MAX_POLYS:
@@ -155,8 +174,8 @@ class Shape:
         average = total * 100.0 / count if count else 0.0
         _crlf(Path(path), f"Avg twist {average:.6f}%\nSelected{' ' if selected else ''}{' '.join(selected)}\n")
 
-    def export_gzs(self, path: str | Path) -> None:
-        name = _asm_name(Path(path))
+    def export_gzs(self, path: str | Path, *, name: str | None = None, simplified_header: bool | None = None) -> None:
+        name = name or self.header.name or _asm_name(Path(path))
         group_faces = [[polygon for polygon in self.polygons if polygon.flags & (1 << group)] for group in range(8)]
         groups = [group for group, faces in enumerate(group_faces) if faces]
         extra: list[Dot] = []
@@ -172,7 +191,7 @@ class Shape:
                 slot = len(self.dots) + len(extra)
                 extra.append(center)
             entries.append((group, slot))
-        lines = self._asm_header(name, extra, overrides)
+        lines = self._asm_header(name, extra, overrides, simplified_header)
         lines += self._asm_points(name, extra, overrides)
         lines.append(f"{name}_F")
         lines += self._vizis()
@@ -192,13 +211,22 @@ class Shape:
         lines += ["", "\tendshape", "", "\tendc"]
         _crlf(Path(path), "\n".join(lines) + "\n")
 
-    def export_bsp(self, path: str | Path) -> None:
-        name = _asm_name(Path(path))
-        nodes, root, flat = self._build_bsp()
-        lines = self._asm_header(name, [], {}) + self._asm_points(name, [], {}) + [f"{name}_F"] + self._vizis()
+    def export_bsp(self, path: str | Path, *, tree: bool = True, name: str | None = None, simplified_header: bool | None = None) -> None:
+        """Write BSP assembler.
+
+        Set ``tree=False`` to force a single ordered face list, even when the
+        BSP classifier would otherwise emit ``BSP``/``BSPInit`` branches.
+        """
+        name = name or self.header.name or _asm_name(Path(path))
+        nodes, root, flat = self._build_bsp() if tree else ([], -1, True)
+        lines = self._asm_header(name, [], {}, simplified_header) + self._asm_points(name, [], {}) + [f"{name}_F"] + self._vizis()
         if self.smooth_shade:
             lines += self._vertex_normals(name, [], {})
-        if flat and root >= 0:
+        if not tree:
+            lines += ["", f"{name}_f1\tFaces"]
+            lines += [self._face(polygon) for polygon in self.polygons if polygon.flags]
+            lines += ["\tFend", "\tEndShape", "", "\tendc"]
+        elif flat and root >= 0:
             lines += ["", f"{name}_f1\tFaces"]
             lines += self._bsp_faces(nodes, root, name, [2])
             lines += ["\tFend", "\tEndShape", "", "\tendc"]
@@ -212,15 +240,21 @@ class Shape:
                 lines += ["\tBSPEND", f"{name}_EBSP", "\tEndShape", "", "\tendc"]
         _crlf(Path(path), "\n".join(lines) + "\n")
 
-    def _asm_header(self, name: str, extra: list[Dot], overrides: dict[int, Dot]) -> list[str]:
+    def _asm_header(self, name: str, extra: list[Dot], overrides: dict[int, Dot], simplified_header: bool | None = None) -> list[str]:
         points = [self._asm_dot(i, 0, extra, overrides) for i in range(len(self.dots) + len(extra))]
         radius = max((_length(_xyz(point)) for point in points), default=0)
         xs = max((abs(point.x) for point in points), default=0)
         ys = max((abs(point.y) for point in points), default=0)
         zs = max((abs(point.z) for point in points), default=0)
         source = str(self.source) if self.source else "SHAPED"
-        return [f";--Shape file ----- {source} ----", "\tifne\tDO_HDR", "", name,
-                f"\tShapeHdr\t{name}_P,0,{name}_F,0,0,0,0,0,0,{xs:.0f},{ys:.0f},{zs:.0f},{radius:.0f},{self.coltab},0,0,0,0,<{name}>", "\telseif"]
+        header = self.header
+        simplified = header.simplified if simplified_header is None else simplified_header
+        fields = [f"{name}_P", "0", f"{name}_F", "0", "0", "0", "0", str(header.scale), str(header.colbox),
+                  f"{xs:.0f}", f"{ys:.0f}", f"{zs:.0f}", f"{radius:.0f}", str(header.colour_table), str(header.shadow)]
+        if not simplified:
+            fields += [str(header.simple1), str(header.simple2), str(header.simple3)]
+        fields.append(f"<{name}>")
+        return [f";--Shape file ----- {source} ----", "\tifne\tDO_HDR", "", name, f"\tShapeHdr\t{','.join(fields)}", "\telseif"]
 
     def _asm_dot(self, index: int, frame: int, extra: list[Dot], overrides: dict[int, Dot]) -> Dot:
         if index in overrides:
@@ -426,15 +460,15 @@ def load_colour_tables(shape: Shape, path: str | Path = "COLTABS.DAT") -> None:
     for record in records:
         fields = record.split()
         if len(fields) == 3 and fields[0] == "COLTAB":
-            shape.coltab = fields[1]
+            shape.header.colour_table = fields[1]
             shape.smooth_shade = int(fields[2]) < 0
             return
 
 
-def write(shape: Shape, path: str | Path, format: Literal["gzs", "bsp", "internal", "3dg1", "twist"]) -> None:
+def write(shape: Shape, path: str | Path, format: Literal["gzs", "bsp", "internal", "3dg1", "twist"], *, tree: bool = True, name: str | None = None, simplified_header: bool | None = None) -> None:
     match format.lower():
-        case "gzs": shape.export_gzs(path)
-        case "bsp": shape.export_bsp(path)
+        case "gzs": shape.export_gzs(path, name=name, simplified_header=simplified_header)
+        case "bsp": shape.export_bsp(path, tree=tree, name=name, simplified_header=simplified_header)
         case "internal": shape.save_internal(path)
         case "3dg1": shape.save_3dg1(path)
         case "twist": shape.twist_report(path)
