@@ -496,10 +496,41 @@ def _load_3dcg(lines: list[str]) -> Shape:
 
 
 def _load_3dan(lines: list[str]) -> Shape:
-    dots_count, frames_count = map(int, lines[0].split()); _check(dots_count, MAX_DOTS); _check(frames_count, MAX_FRAMES); cursor = 1; frames = []
-    for _ in range(frames_count):
-        frame = [FrameDot(*map(_dos, map(float, lines[cursor + i].split()))) for i in range(dots_count)]; cursor += dots_count; frames.append(frame)
-    polygons = _packed_polygons(lines[cursor:], False, False); return Shape([Dot(d.x, d.y, d.z) for d in frames[0]], polygons, frames)
+    # The DOS reader uses fscanf("%u %u"), so the two header counts and all
+    # following coordinates are whitespace-delimited rather than line-bound.
+    # In particular, valid files commonly put the dot and frame counts on
+    # separate lines.
+    tokens = " ".join(lines).split()
+    if len(tokens) < 2:
+        raise FormatError("incomplete 3DAN header")
+    dots_count, frames_count = map(int, tokens[:2])
+    _check(dots_count, MAX_DOTS)
+    _check(frames_count, MAX_FRAMES)
+    cursor = 2
+    frames: list[list[FrameDot]] = []
+    try:
+        for _ in range(frames_count):
+            frame = []
+            for _ in range(dots_count):
+                x, y, z = map(float, tokens[cursor:cursor + 3])
+                cursor += 3
+                frame.append(FrameDot(_dos(x), _dos(y), _dos(z)))
+            frames.append(frame)
+        polygons: list[Polygon] = []
+        while cursor < len(tokens):
+            count = int(tokens[cursor])
+            cursor += 1
+            _check(count, MAX_POLY_VERTS)
+            indices = list(map(int, tokens[cursor:cursor + count]))
+            if len(indices) != count:
+                raise FormatError("incomplete 3DAN polygon")
+            cursor += count
+            packed = int(tokens[cursor], 0)
+            cursor += 1
+            polygons.append(Polygon(indices, packed & 0xFF, 1, (packed >> 1) or 7))
+    except (IndexError, ValueError) as error:
+        raise FormatError("invalid or incomplete 3DAN data") from error
+    return Shape([Dot(d.x, d.y, d.z) for d in frames[0]], polygons, frames)
 
 
 def _load_3da1(lines: list[str]) -> Shape:
