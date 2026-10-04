@@ -22,7 +22,6 @@ FORMATS = {
     "bsp": ".asm",
     "internal": ".3dcg",
     "3dg1": ".3dg",
-    "twist": ".txt",
 }
 
 

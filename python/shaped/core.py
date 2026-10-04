@@ -147,33 +147,6 @@ class Shape:
                 lines.append(f"{len(polygon.index)} {' '.join(map(str, polygon.index))} {polygon.colour}")
         _crlf(Path(path), "\n".join(lines) + "\n")
 
-    def twist_report(self, path: str | Path) -> None:
-        total = 0.0
-        count = 0
-        selected: list[str] = []
-        for pi, polygon in enumerate(self.polygons):
-            if not polygon.flags or len(polygon.index) <= 2:
-                continue
-            count += 1
-            polygon.selected = False
-            value = 0.0
-            if len(polygon.index) > 3:
-                a, b, c = (self.dot_at(i) for i in polygon.index[:3])
-                u = (b.x - a.x, b.y - a.y, b.z - a.z)
-                v = (c.x - a.x, c.y - a.y, c.z - a.z)
-                normal = _cross(u, v)
-                magnitude = _length(normal)
-                if magnitude:
-                    normal = tuple(x / magnitude for x in normal)
-                    plane = _dot(normal, (a.x, a.y, a.z))
-                    value = sum((_dot(normal, _xyz(self.dot_at(i))) - plane) ** 2 for i in polygon.index) / magnitude
-                    if value > 0.01:
-                        polygon.selected = True
-                        selected.append(str(pi))
-            total += value
-        average = total * 100.0 / count if count else 0.0
-        _crlf(Path(path), f"Avg twist {average:.6f}%\nSelected{' ' if selected else ''}{' '.join(selected)}\n")
-
     def export_gzs(self, path: str | Path, *, name: str | None = None, simplified_header: bool | None = None) -> None:
         name = name or self.header.name or _asm_name(Path(path))
         group_faces = [[polygon for polygon in self.polygons if polygon.flags & (1 << group)] for group in range(8)]
@@ -474,13 +447,12 @@ def load_colour_tables(shape: Shape, path: str | Path = "COLTABS.DAT") -> None:
             return
 
 
-def write(shape: Shape, path: str | Path, format: Literal["gzs", "bsp", "internal", "3dg1", "twist"], *, tree: bool = True, name: str | None = None, simplified_header: bool | None = None) -> None:
+def write(shape: Shape, path: str | Path, format: Literal["gzs", "bsp", "internal", "3dg1"], *, tree: bool = True, name: str | None = None, simplified_header: bool | None = None) -> None:
     match format.lower():
         case "gzs": shape.export_gzs(path, name=name, simplified_header=simplified_header)
         case "bsp": shape.export_bsp(path, tree=tree, name=name, simplified_header=simplified_header)
         case "internal": shape.save_internal(path)
         case "3dg1": shape.save_3dg1(path)
-        case "twist": shape.twist_report(path)
         case _: raise ValueError(f"unsupported export format: {format}")
 
 
