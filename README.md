@@ -21,6 +21,9 @@ Build with CMake (`cmake -S . -B build && cmake --build build`) or `make` on a
 POSIX system. The executable is a standard console program and requires only a
 C11 compiler and the math library.
 
+For Python embedding and Blender integration, see the detailed
+[Python library guide](docs/PYTHON_LIBRARY.md).
+
 ## Python Blender integration
 
 The pure-Python library accepts the same model formats and can generate GZS,
