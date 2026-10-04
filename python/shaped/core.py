@@ -241,7 +241,16 @@ class Shape:
         _crlf(Path(path), "\n".join(lines) + "\n")
 
     def _asm_header(self, name: str, extra: list[Dot], overrides: dict[int, Dot], simplified_header: bool | None = None) -> list[str]:
-        points = [self._asm_dot(i, 0, extra, overrides) for i in range(len(self.dots) + len(extra))]
+        # Match asm_bounds() in the C exporter: header dimensions cover every
+        # active source dot in every animation frame. Appended group centres
+        # are static auxiliary points and are considered once.
+        points = [
+            self._asm_dot(index, frame, extra, overrides)
+            for frame in range(self.frame_count)
+            for index in range(len(self.dots))
+            if self._asm_active(index, frame, extra, overrides)
+        ]
+        points.extend(extra)
         radius = max((_length(_xyz(point)) for point in points), default=0)
         xs = max((abs(point.x) for point in points), default=0)
         ys = max((abs(point.y) for point in points), default=0)
