@@ -20,6 +20,7 @@ else:  # Supports: python python/shaped/frontend.py
 FORMATS = {
     "gzs": ".asm",
     "bsp": ".asm",
+    "bspflat": ".asm",
     "internal": ".3dcg",
     "3dg1": ".3dg",
 }
@@ -54,6 +55,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("output", type=Path, nargs="?", help="output path")
     parser.add_argument("--summary", action="store_true", help="print model information without exporting")
     args = parser.parse_args(argv)
+    treebool = True
     try:
         if args.input is None:
             source, format_id, output = _interactive()
@@ -67,11 +69,14 @@ def main(argv: list[str] | None = None) -> int:
                     parser.error("format is required when an input is supplied")
                 format_id = args.format
                 output = args.output or source.with_suffix(FORMATS[format_id])
+        if format_id == "bspflat":
+            treebool = False
+            format_id = "bsp"
         model = load(source)
         load_colour_tables(model, source.parent / "COLTABS.DAT")
         print(_summary(model))
         if not args.summary or args.input is None:
-            write(model, output, format_id)
+            write(model, output, format_id, tree=treebool)
             print(f"\nSaved: {output}")
     except (FormatError, OSError, ValueError) as error:
         print(f"Error: {error}", file=sys.stderr)
